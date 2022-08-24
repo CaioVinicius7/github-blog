@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import {
+  FaBuilding,
   FaExternalLinkAlt,
   FaGithub,
-  FaBuilding,
   FaUserFriends
 } from "react-icons/fa";
 

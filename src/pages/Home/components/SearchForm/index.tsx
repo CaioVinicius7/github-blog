@@ -4,13 +4,17 @@ import * as zod from "zod";
 
 import { SearchFormContainer } from "./styles";
 
+interface SearchFormProps {
+  issuesQuantity: number;
+}
+
 const searchFormSchema = zod.object({
   query: zod.string()
 });
 
 type SearchFormInputs = zod.infer<typeof searchFormSchema>;
 
-function SearchForm() {
+function SearchForm({ issuesQuantity }: SearchFormProps) {
   const { register } = useForm<SearchFormInputs>({
     resolver: zodResolver(searchFormSchema)
   });
@@ -19,7 +23,7 @@ function SearchForm() {
     <SearchFormContainer>
       <div>
         <strong> Publicações </strong>
-        <span> 0 publicações </span>
+        <span> {issuesQuantity} publicações </span>
       </div>
       <input
         type="text"
