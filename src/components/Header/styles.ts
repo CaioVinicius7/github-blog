@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
-  width: 100vw;
+  max-width: 100vw;
   height: 18.5rem;
   background-image: linear-gradient(#0b1b2b, #0d253d);
 
