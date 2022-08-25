@@ -34,6 +34,7 @@ export const IssueCardContainer = styled.div`
 
   p {
     line-height: 160%;
+    word-break: break-all;
     color: ${(props) => props.theme["base-text"]};
   }
 
