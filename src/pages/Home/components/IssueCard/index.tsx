@@ -15,12 +15,15 @@ function IssueCard({ title, content, createdAt }: IssueCardProps) {
     locale: ptBR
   });
 
+  const shortenedTitle =
+    title.length > 38 ? title.substring(0, 38).concat("...") : title;
+
   const shortenedContent = content.substring(0, 181).concat("...");
 
   return (
     <IssueCardContainer>
       <div>
-        <strong> {title} </strong>
+        <strong> {shortenedTitle} </strong>
         <span> {formattedDate} </span>
       </div>
 

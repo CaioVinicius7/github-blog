@@ -19,14 +19,14 @@ export const IssueCardContainer = styled.div`
     justify-content: space-between;
 
     strong {
-      max-width: 70%;
+      max-width: 65%;
       font-size: 1.25rem;
       color: ${(props) => props.theme["base-title"]};
     }
 
     span {
+      text-align: right;
       margin-top: 0.5rem;
-      display: block;
       font-size: 0.875rem;
       color: ${(props) => props.theme["base-span"]};
     }
