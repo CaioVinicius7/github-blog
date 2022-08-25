@@ -4,11 +4,10 @@ import { IssueCard } from "./components/IssueCard";
 import { ProfileCard } from "./components/ProfileCard";
 import { SearchForm } from "./components/SearchForm";
 
-import { IssuesContainer, NotFoundContainer } from "./styles";
+import { IssuesContainer } from "./styles";
 
 import { api } from "../../lib/axios";
-
-import notFound from "../../assets/not-found.svg";
+import { NotFound } from "./components/NotFound";
 
 interface Issue {
   id: number;
@@ -50,12 +49,7 @@ function Home() {
 
       <SearchForm issuesQuantity={issues.length} filterIssues={filterIssues} />
 
-      {filteredIssuesIsEmpty && !filterIsEmpty && (
-        <NotFoundContainer>
-          <img src={notFound} alt="Not Found" />
-          <strong> Nenhum resultado encontrado! </strong>
-        </NotFoundContainer>
-      )}
+      {filteredIssuesIsEmpty && !filterIsEmpty && <NotFound />}
 
       <IssuesContainer>
         {filterIsEmpty
