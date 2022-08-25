@@ -4,8 +4,11 @@ import { IssueCard } from "./components/IssueCard";
 import { ProfileCard } from "./components/ProfileCard";
 import { SearchForm } from "./components/SearchForm";
 
+import { IssuesContainer, NotFoundContainer } from "./styles";
+
 import { api } from "../../lib/axios";
-import { IssuesContainer } from "./styles";
+
+import notFound from "../../assets/not-found.svg";
 
 interface Issue {
   id: number;
@@ -16,6 +19,11 @@ interface Issue {
 
 function Home() {
   const [issues, setIssues] = useState<Issue[]>([]);
+  const [filter, setFilter] = useState("");
+
+  function filterIssues(filter: string) {
+    setFilter(filter);
+  }
 
   async function loadIssues() {
     const response = await api.get(
@@ -29,22 +37,48 @@ function Home() {
     loadIssues();
   }, []);
 
+  const filteredIssues = issues.filter((issue) =>
+    issue.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  const filterIsEmpty = filter.length === 0;
+  const filteredIssuesIsEmpty = filteredIssues.length === 0;
+
   return (
     <>
       <ProfileCard />
-      <SearchForm issuesQuantity={issues.length} />
+
+      <SearchForm issuesQuantity={issues.length} filterIssues={filterIssues} />
+
+      {filteredIssuesIsEmpty && !filterIsEmpty && (
+        <NotFoundContainer>
+          <img src={notFound} alt="Not Found" />
+          <strong> Nenhum resultado encontrado! </strong>
+        </NotFoundContainer>
+      )}
 
       <IssuesContainer>
-        {issues.map((issue) => {
-          return (
-            <IssueCard
-              key={issue.id}
-              title={issue.title}
-              content={issue.body}
-              createdAt={issue.created_at}
-            />
-          );
-        })}
+        {filterIsEmpty
+          ? issues.map((issue) => {
+              return (
+                <IssueCard
+                  key={issue.id}
+                  title={issue.title}
+                  content={issue.body}
+                  createdAt={issue.created_at}
+                />
+              );
+            })
+          : filteredIssues.map((issue) => {
+              return (
+                <IssueCard
+                  key={issue.id}
+                  title={issue.title}
+                  content={issue.body}
+                  createdAt={issue.created_at}
+                />
+              );
+            })}
       </IssuesContainer>
     </>
   );

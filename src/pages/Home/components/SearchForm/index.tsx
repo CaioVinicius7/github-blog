@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import * as zod from "zod";
 
@@ -6,6 +7,7 @@ import { SearchFormContainer } from "./styles";
 
 interface SearchFormProps {
   issuesQuantity: number;
+  filterIssues: (filter: string) => void;
 }
 
 const searchFormSchema = zod.object({
@@ -14,10 +16,14 @@ const searchFormSchema = zod.object({
 
 type SearchFormInputs = zod.infer<typeof searchFormSchema>;
 
-function SearchForm({ issuesQuantity }: SearchFormProps) {
+function SearchForm({ issuesQuantity, filterIssues }: SearchFormProps) {
   const { register } = useForm<SearchFormInputs>({
     resolver: zodResolver(searchFormSchema)
   });
+
+  function handleSearchIssue(event: ChangeEvent<HTMLInputElement>) {
+    filterIssues(event.target.value);
+  }
 
   return (
     <SearchFormContainer>
@@ -30,6 +36,7 @@ function SearchForm({ issuesQuantity }: SearchFormProps) {
         placeholder="Buscar conteúdo"
         autoComplete="off"
         {...register("query")}
+        onChange={handleSearchIssue}
       />
     </SearchFormContainer>
   );

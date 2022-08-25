@@ -11,7 +11,6 @@ export const IssueCardContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 1.25rem;
 
   div {
@@ -21,7 +20,6 @@ export const IssueCardContainer = styled.div`
 
     strong {
       max-width: 70%;
-      line-height: 160%;
       font-size: 1.25rem;
       color: ${(props) => props.theme["base-title"]};
     }
@@ -42,5 +40,15 @@ export const IssueCardContainer = styled.div`
   &:hover {
     cursor: pointer;
     border: 2px solid ${(props) => props.theme["base-label"]};
+  }
+
+  @media (max-width: 900px) {
+    div {
+      flex-direction: column;
+
+      strong {
+        max-width: 100%;
+      }
+    }
   }
 `;
