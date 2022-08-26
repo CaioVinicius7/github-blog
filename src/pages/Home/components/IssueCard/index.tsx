@@ -4,6 +4,8 @@ import { IssueCardContainer } from "./styles";
 
 import { distanceToNow } from "../../../../lib/dateFns";
 
+import { removeSpecialCharacters } from "../../../../utils/regex";
+
 interface IssueCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   content: string;
@@ -16,7 +18,9 @@ function IssueCard({ title, content, createdAt, ...props }: IssueCardProps) {
   const shortenedTitle =
     title.length > 38 ? title.substring(0, 38).concat("...") : title;
 
-  const shortenedContent = content.substring(0, 181).concat("...");
+  const markdownToText = content.replace(removeSpecialCharacters, " ");
+
+  const shortenedContent = markdownToText.substring(0, 181).concat("...");
 
   return (
     <IssueCardContainer {...props}>
