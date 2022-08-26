@@ -1,5 +1,3 @@
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import {
   FaCalendarDay,
   FaChevronLeft,
@@ -10,6 +8,8 @@ import {
 import { NavLink } from "react-router-dom";
 
 import { IssueCardContainer } from "./styles";
+
+import { distanceToNow } from "../../../../lib/dateFns";
 
 interface IssueCardProps {
   title: string;
@@ -26,10 +26,7 @@ function IssueCard({
   createdAt,
   user
 }: IssueCardProps) {
-  const formattedDate = formatDistanceToNow(new Date(createdAt), {
-    addSuffix: true,
-    locale: ptBR
-  });
+  const formattedDate = distanceToNow(createdAt);
 
   return (
     <IssueCardContainer>
