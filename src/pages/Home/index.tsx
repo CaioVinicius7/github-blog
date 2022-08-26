@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { IssueCard } from "./components/IssueCard";
 import { ProfileCard } from "./components/ProfileCard";
@@ -11,6 +12,7 @@ import { NotFound } from "./components/NotFound";
 
 interface Issue {
   id: number;
+  number: number;
   title: string;
   body: string;
   created_at: Date;
@@ -20,9 +22,7 @@ function Home() {
   const [issues, setIssues] = useState<Issue[]>([]);
   const [filter, setFilter] = useState("");
 
-  function filterIssues(filter: string) {
-    setFilter(filter);
-  }
+  const navigate = useNavigate();
 
   async function loadIssues() {
     const response = await api.get(
@@ -35,6 +35,10 @@ function Home() {
   useEffect(() => {
     loadIssues();
   }, []);
+
+  function filterIssues(filter: string) {
+    setFilter(filter);
+  }
 
   const filteredIssues = issues.filter((issue) =>
     issue.title.toLowerCase().includes(filter.toLowerCase())
@@ -60,6 +64,7 @@ function Home() {
                   title={issue.title}
                   content={issue.body}
                   createdAt={issue.created_at}
+                  onClick={() => navigate(`/issue/${issue.number}`)}
                 />
               );
             })
@@ -70,6 +75,7 @@ function Home() {
                   title={issue.title}
                   content={issue.body}
                   createdAt={issue.created_at}
+                  onClick={() => navigate(`/issue/${issue.number}`)}
                 />
               );
             })}

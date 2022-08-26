@@ -1,15 +1,16 @@
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { HTMLAttributes } from "react";
 
 import { IssueCardContainer } from "./styles";
 
-interface IssueCardProps {
+interface IssueCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   content: string;
   createdAt: Date;
 }
 
-function IssueCard({ title, content, createdAt }: IssueCardProps) {
+function IssueCard({ title, content, createdAt, ...props }: IssueCardProps) {
   const formattedDate = formatDistanceToNow(new Date(createdAt), {
     addSuffix: true,
     locale: ptBR
@@ -21,7 +22,7 @@ function IssueCard({ title, content, createdAt }: IssueCardProps) {
   const shortenedContent = content.substring(0, 181).concat("...");
 
   return (
-    <IssueCardContainer>
+    <IssueCardContainer {...props}>
       <div>
         <strong> {shortenedTitle} </strong>
         <span> {formattedDate} </span>

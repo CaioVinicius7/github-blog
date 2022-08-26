@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import {
   FaCalendarDay,
   FaChevronLeft,
@@ -5,39 +7,60 @@ import {
   FaExternalLinkAlt,
   FaGithub
 } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 import { IssueCardContainer } from "./styles";
 
-function IssueCard() {
+interface IssueCardProps {
+  title: string;
+  comments: number;
+  htmlUrl: string;
+  createdAt: Date;
+  user: string;
+}
+
+function IssueCard({
+  title,
+  comments,
+  htmlUrl,
+  createdAt,
+  user
+}: IssueCardProps) {
+  const formattedDate = formatDistanceToNow(new Date(createdAt), {
+    addSuffix: true,
+    locale: ptBR
+  });
+
   return (
     <IssueCardContainer>
       <header>
-        <a href="#">
+        <NavLink to="/home">
           <FaChevronLeft />
           Voltar
-        </a>
+        </NavLink>
 
-        <a href="#">
+        <a href={htmlUrl} target="_blank" rel="noreferrer">
           Ver no github
           <FaExternalLinkAlt />
         </a>
       </header>
 
-      <strong> Titulo </strong>
+      <strong> {title} </strong>
 
       <footer>
         <span>
           <FaGithub color="#3A536B" />
-          CaioVinicius7
+          {user}
         </span>
 
         <span>
           <FaCalendarDay color="#3A536B" />
-          há 1 dia
+          {formattedDate}
         </span>
 
         <span>
-          <FaComment color="#3A536B" />5 comentários
+          <FaComment color="#3A536B" />
+          {comments} comentários
         </span>
       </footer>
     </IssueCardContainer>
