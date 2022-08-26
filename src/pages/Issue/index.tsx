@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { Load } from "../../components/Load";
 import { IssueCard } from "./components/IssueCard";
 
 import { IssueContentContainer } from "./styles";
@@ -23,7 +24,7 @@ interface IssueData {
 function Issue() {
   const navigate = useNavigate();
   const [issue, setIssue] = useState<IssueData>({} as IssueData);
-  const [isLoading, setIsLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { issueNumber } = useParams<{ issueNumber: string }>();
 
@@ -33,7 +34,7 @@ function Issue() {
     await api
       .get(`/repos/caiovinicius7/github-blog/issues/${issueNumber}`)
       .then((response) => {
-        setIsLoad(false);
+        setIsLoading(false);
         setIssue(response.data);
       });
   }
@@ -43,7 +44,7 @@ function Issue() {
   }, [issueNumber]);
 
   return isLoading ? (
-    <h1> Carregando... </h1>
+    <Load />
   ) : (
     <>
       <IssueCard

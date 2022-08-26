@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Load } from "../../components/Load";
 import { IssueCard } from "./components/IssueCard";
 import { ProfileCard } from "./components/ProfileCard";
 import { SearchForm } from "./components/SearchForm";
@@ -21,15 +22,17 @@ interface Issue {
 function Home() {
   const [issues, setIssues] = useState<Issue[]>([]);
   const [filter, setFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
   async function loadIssues() {
-    const response = await api.get(
-      "search/issues?q=repo:caiovinicius7/github-blog"
-    );
-
-    setIssues(response.data.items);
+    await api
+      .get("search/issues?q=repo:caiovinicius7/github-blog")
+      .then((response) => {
+        setIsLoading(false);
+        setIssues(response.data.items);
+      });
   }
 
   useEffect(() => {
@@ -47,7 +50,9 @@ function Home() {
   const filterIsEmpty = filter.length === 0;
   const filteredIssuesIsEmpty = filteredIssues.length === 0;
 
-  return (
+  return isLoading ? (
+    <Load />
+  ) : (
     <>
       <ProfileCard />
 
