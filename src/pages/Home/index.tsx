@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 import { Load } from "../../components/Load";
 import { IssueCard } from "./components/IssueCard";
+import { NotFound } from "./components/NotFound";
+import { Pagination } from "./components/Pagination";
 import { ProfileCard } from "./components/ProfileCard";
 import { SearchForm } from "./components/SearchForm";
 
 import { IssuesContainer } from "./styles";
 
 import { api } from "../../lib/axios";
-import { NotFound } from "./components/NotFound";
 
 interface Issue {
   id: number;
@@ -19,19 +20,36 @@ interface Issue {
   created_at: Date;
 }
 
+interface IssuesData {
+  total: number;
+  issues: Issue[];
+}
+
 function Home() {
-  const [issues, setIssues] = useState<Issue[]>([]);
+  const [issuesData, setIssuesData] = useState<IssuesData>({
+    total: 0,
+    issues: []
+  });
   const [filter, setFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  async function loadIssues() {
+  async function loadIssues(page = 1) {
     await api
-      .get("search/issues?q=repo:caiovinicius7/github-blog")
+      .get("search/issues", {
+        params: {
+          q: "repo:caiovinicius7/github-blog",
+          per_page: 10,
+          page
+        }
+      })
       .then((response) => {
         setIsLoading(false);
-        setIssues(response.data.items);
+        setIssuesData({
+          total: response.data.total_count,
+          issues: response.data.items
+        });
       });
   }
 
@@ -43,7 +61,7 @@ function Home() {
     setFilter(filter);
   }
 
-  const filteredIssues = issues.filter((issue) =>
+  const filteredIssues = issuesData.issues.filter((issue) =>
     issue.title.toLowerCase().includes(filter.toLowerCase())
   );
 
@@ -56,13 +74,16 @@ function Home() {
     <>
       <ProfileCard />
 
-      <SearchForm issuesQuantity={issues.length} filterIssues={filterIssues} />
+      <SearchForm
+        issuesQuantity={issuesData.issues.length}
+        filterIssues={filterIssues}
+      />
 
       {filteredIssuesIsEmpty && !filterIsEmpty && <NotFound />}
 
       <IssuesContainer>
         {filterIsEmpty
-          ? issues.map((issue) => {
+          ? issuesData.issues.map((issue) => {
               return (
                 <IssueCard
                   key={issue.id}
@@ -85,6 +106,8 @@ function Home() {
               );
             })}
       </IssuesContainer>
+
+      <Pagination total={issuesData.total} loadIssues={loadIssues} />
     </>
   );
 }
